@@ -230,6 +230,7 @@ public:
 
         cout << "\n=== ДОБАВИТЬ НОВОЕ БЛЮДО ===\n";
         
+        // Корректно очищаем поток ввода
         cin.clear();
         cin.ignore(10000, '\n');
         
@@ -243,26 +244,20 @@ public:
 
         cout << "Введите цену: ";
         cout.flush();
-        try {
-            cin >> price;
+        cin >> price;
+        if (cin.fail()) {
+            cin.clear();
             cin.ignore(10000, '\n');
-            if (cin.fail()) {
-                throw ValidationException("price - неверный формат цены");
-            }
-        } catch (...) {
-            throw ValidationException("price - ошибка при вводе цены");
+            throw ValidationException("price - неверный формат цены");
         }
 
         cout << "Введите время приготовления (мин): ";
         cout.flush();
-        try {
-            cin >> cooking_time;
+        cin >> cooking_time;
+        if (cin.fail()) {
+            cin.clear();
             cin.ignore(10000, '\n');
-            if (cin.fail()) {
-                throw ValidationException("cooking_time - неверный формат времени");
-            }
-        } catch (...) {
-            throw ValidationException("cooking_time - ошибка при вводе времени");
+            throw ValidationException("cooking_time - неверный формат времени");
         }
 
         MenuItem new_item(name, price, cooking_time);
@@ -333,10 +328,8 @@ public:
 
 int main() {
     // Установка UTF-8 кодировки для консоли Windows
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
-    
-    // Для русского языка
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
     setlocale(LC_ALL, ".UTF8");
     
     try {

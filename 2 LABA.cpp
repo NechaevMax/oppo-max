@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <locale>
 #include <windows.h>
+#include <limits>
 
 
 using namespace std;
@@ -127,15 +128,36 @@ public:
         int cookingtime;
 
         cout << "\n=== ДОБАВИТЬ НОВОЕ БЛЮДО ===\n";
+
+        // корректно очищаем поток
+        cin.clear();
+        cin.ignore(10000, '\n');
+
         cout << "Введите название: ";
-        cin.ignore();
         getline(cin, name);
+
+        if (name.empty()) {
+            cout << "Ошибка: название не может быть пустым\n";
+            return;
+        }
 
         cout << "Введите цену: ";
         cin >> price;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Ошибка: неверный формат цены\n";
+            return;
+        }
 
         cout << "Введите время приготовления (мин): ";
         cin >> cookingtime;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Ошибка: неверный формат времени\n";
+            return;
+        }
 
         menuitem item;
         item.setname(name);
@@ -143,7 +165,7 @@ public:
         item.setcookingtime(cookingtime);
 
         items.push_back(item);
-        cout << "Блюдо добавлено!\n";
+        cout << "Блюдо '" << name << "' успешно добавлено!\n";
     }
 
     void displaymenu() {
