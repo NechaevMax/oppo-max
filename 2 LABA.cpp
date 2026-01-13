@@ -188,14 +188,14 @@ public:
 };
 
 int main() {
-    setlocale(LC_ALL, "");
-    
-    // Включаем поддержку UTF-8 в консоли
+    // Устанавливаем кодировку консоли Windows на UTF-8
     SetConsoleCP(65001);
     SetConsoleOutputCP(65001);
+    setlocale(LC_ALL, ".UTF8");
     
-    // Устанавливаем локаль для cout
+    // Для совместимости с Windows консолью
     ios_base::sync_with_stdio(false);
+    cout.imbue(locale(""));
 
     menumanager manager;
     manager.readfromfile("menu.txt");
