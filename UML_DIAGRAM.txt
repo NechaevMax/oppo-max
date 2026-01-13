@@ -1,0 +1,131 @@
+UML ДИАГРАММА КЛАССОВ
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         MenuException                            │
+│                 (abstract base exception class)                   │
+├─────────────────────────────────────────────────────────────────┤
+│ - message: string                                               │
+├─────────────────────────────────────────────────────────────────┤
+│ + MenuException(message: string)                                │
+└─────────────────────────────────────────────────────────────────┘
+             △             △             △
+             │             │             │
+   ┌─────────┴─────┐       │             │
+   │               │       │             │
+   │        ┌──────┴───┐   │      ┌──────┴────┐
+   │        │          │   │      │           │
+   v        v          v   v      v           v
+┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
+│  FileException   │ │ParseException    │ │ValidationException│
+├──────────────────┤ ├──────────────────┤ ├──────────────────┤
+│ - filename       │ │ - line           │ │ - field          │
+├──────────────────┤ ├──────────────────┤ ├──────────────────┤
+│ + FileException  │ │ + ParseException │ │ + ValidationEx   │
+│   (filename)     │ │   (line)         │ │   (field)        │
+└──────────────────┘ └──────────────────┘ └──────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│                        MenuItem                                  │
+├──────────────────────────────────────────────────────────────────┤
+│ - name_: string                                                  │
+│ - price_: double                                                 │
+│ - cooking_time_: int                                             │
+├──────────────────────────────────────────────────────────────────┤
+│ + MenuItem()                                                     │
+│ + MenuItem(name: string, price: double, time: int)               │
+│ + validate(): void (throws ValidationException)                  │
+│ + getName(): const string&                                       │
+│ + getPrice(): double                                             │
+│ + getCookingTime(): int                                          │
+│ + setName(n: string): void (throws ValidationException)          │
+│ + setPrice(p: double): void (throws ValidationException)         │
+│ + setCookingTime(t: int): void (throws ValidationException)      │
+│ + print(): void                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│                    MenuFileReader                                │
+├──────────────────────────────────────────────────────────────────┤
+│                    (статический класс)                           │
+├──────────────────────────────────────────────────────────────────┤
+│ + parseMenuItem(line: string): MenuItem                          │
+│     (throws ParseException)                                      │
+│ - removeQuotes(s: string): string                                │
+└──────────────────────────────────────────────────────────────────┘
+           △
+           │ использует
+           │
+           └──> MenuItem
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│                      MenuManager                                 │
+├──────────────────────────────────────────────────────────────────┤
+│ - items_: vector<MenuItem>                                       │
+├──────────────────────────────────────────────────────────────────┤
+│ + readFromFile(filename: string): void                           │
+│     (throws FileException, ParseException)                       │
+│ + sortByCookingTime(): void                                      │
+│ + filterByTime(max_time: int): void                              │
+│     (throws ValidationException, выводит результаты)            │
+│ + printAll(): void                                               │
+│ + addItemManually(): void                                        │
+│     (throws ValidationException)                                 │
+│ + displayMenu(): void                                            │
+│     (основной интерактивный цикл)                               │
+└──────────────────────────────────────────────────────────────────┘
+           △
+           │ содержит
+           │ вектор
+           │
+           └──> MenuItem
+
+
+ОТНОШЕНИЯ МЕЖДУ КЛАССАМИ:
+
+1. НАСЛЕДОВАНИЕ (Inheritance):
+   - FileException, ParseException, ValidationException 
+     наследуют MenuException
+
+2. КОМПОЗИЦИЯ (Composition):
+   - MenuManager содержит vector<MenuItem>
+
+3. ИСПОЛЬЗОВАНИЕ (Uses):
+   - MenuFileReader используется MenuManager при readFromFile()
+   - MenuFileReader работает с MenuItem через parseMenuItem()
+
+4. ИСКЛЮЧЕНИЯ (Exception Handling):
+   - MenuException - базовый класс для всех исключений
+   - FileException - для ошибок файлов
+   - ParseException - для ошибок парсинга
+   - ValidationException - для ошибок валидации
+
+
+ДИАГРАММА ЖИЗНЕННОГО ЦИКЛА:
+
+main()
+  ↓
+  ├─ SetConsoleCP (UTF-8 encoding)
+  ├─ MenuManager manager
+  ├─ manager.readFromFile("menu.txt")
+  │   ↓
+  │   ├─ ifstream открывает файл
+  │   ├─ MenuFileReader::parseMenuItem() для каждой строки
+  │   │   ↓
+  │   │   └─ MenuItem constructor + validate()
+  │   │       ├─ Успех: добавить в items_
+  │   │       └─ Ошибка: поймать ValidationException
+  │   │
+  │   └─ Проверка: items_ не пуста
+  │
+  ├─ manager.displayMenu() (интерактивный цикл)
+  │   ├─ Опция 1: printAll()
+  │   ├─ Опция 2: sortByCookingTime() → printAll()
+  │   ├─ Опция 3: filterByTime(max_time)
+  │   ├─ Опция 4: addItemManually()
+  │   │   └─ MenuItem constructor + validate()
+  │   └─ Опция 5: выход
+  │
+  └─ return 0
