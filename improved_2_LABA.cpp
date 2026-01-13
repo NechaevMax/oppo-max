@@ -6,11 +6,11 @@
 #include <algorithm>
 #include <windows.h>
 #include <stdexcept>
-#include <optional>
+#include <iomanip>
 
 using namespace std;
 
-// Пользовательские исключения
+// ========== СИСТЕМНЫЕ ИСКЛЮЧЕНИЯ ==========
 class MenuException : public runtime_error {
 public:
     explicit MenuException(const string& message) : runtime_error(message) {}

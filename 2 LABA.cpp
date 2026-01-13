@@ -188,10 +188,14 @@ public:
 };
 
 int main() {
-    setlocale(LC_ALL, "Russian");
-
-    SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);
+    setlocale(LC_ALL, "");
+    
+    // Включаем поддержку UTF-8 в консоли
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
+    
+    // Устанавливаем локаль для cout
+    ios_base::sync_with_stdio(false);
 
     menumanager manager;
     manager.readfromfile("menu.txt");
