@@ -133,7 +133,8 @@ public:
             cout << "1. Вывести все блюда\n";
             cout << "2. Вывести отсортировано по времени\n";
             cout << "3. Фильтр по времени приготовления\n";
-            cout << "4. Выход\n";
+            cout << "4. Добавить новое блюдо\n";
+            cout << "5. Выход\n";
             cout << "Выберите опцию: ";
             cin >> choice;
 
@@ -156,12 +157,40 @@ public:
                     break;
                 }
                 case 4:
+                    additemmanually();
+                    break;
+                case 5:
                     cout << "До свидания!\n";
                     return;
                 default:
                     cout << "Неправильный выбор. Попробуйте снова.\n";
             }
         }
+    }
+
+    void additemmanually() {
+        string name;
+        double price;
+        int cookingtime;
+
+        cout << "\n=== ДОБАВИТЬ НОВОЕ БЛЮДО ===\n";
+        cout << "Введите название блюда: ";
+        cin.ignore();
+        getline(cin, name);
+
+        cout << "Введите цену: ";
+        cin >> price;
+
+        cout << "Введите время приготовления (мин): ";
+        cin >> cookingtime;
+
+        menuitem newitem;
+        newitem.setname(name);
+        newitem.setprice(price);
+        newitem.setcookingtime(cookingtime);
+
+        items.push_back(newitem);
+        cout << "Блюдо успешно добавлено!\n";
     }
 };
 
