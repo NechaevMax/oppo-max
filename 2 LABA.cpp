@@ -129,39 +129,68 @@ public:
     void displaymenu() {
         int choice;
         while (true) {
-            cout << "\n========== ГЛАВНОЕ МЕНЮ РЕСТОРАНА ==========\n";
-            cout << "1. Показать все блюда в меню\n";
-            cout << "2. Показать блюда отсортированные по времени\n";
-            cout << "3. Поиск блюд по времени приготовления\n";
-            cout << "4. Выход из программы\n";
-            cout << "Выберите пункт меню: ";
+            cout << "\n========== МЕНЮ ==========\n";
+            cout << "1. Вывести все блюда\n";
+            cout << "2. Вывести отсортировано по времени\n";
+            cout << "3. Фильтр по времени приготовления\n";
+            cout << "4. Добавить новое блюдо\n";
+            cout << "5. Выход\n";
+            cout << "Выберите опцию: ";
             cin >> choice;
 
             switch (choice) {
                 case 1:
-                    cout << "\n========== ПОЛНОЕ МЕНЮ =========\n";
+                    cout << "\n=== ВСЕ БЛЮДА ===\n";
                     printall();
                     break;
                 case 2:
-                    cout << "\n========== МЕНЮ ОТСОРТИРОВАНО ПО ВРЕМЕНИ =========\n";
+                    cout << "\n=== ОТСОРТИРОВАНО ПО ВРЕМЕНИ ===\n";
                     sortbycookingtime();
                     printall();
                     break;
                 case 3: {
                     int t;
-                    cout << "Введите максимальное время приготовления (мин): ";
+                    cout << "Введите максимальное время (мин): ";
                     cin >> t;
-                    cout << "\n========== ПОИСК: ВРЕМЯ ДО " << t << " МИН =========\n";
+                    cout << "\n=== ФИЛЬТР ПО ВРЕМЕНИ (" << t << " мин) ===\n";
                     filterbytime(t);
                     break;
                 }
                 case 4:
-                    cout << "Спасибо, что пользуетесь нашим сервисом!\n";
+                    additemmanually();
+                    break;
+                case 5:
+                    cout << "До свидания!\n";
                     return;
                 default:
-                    cout << "Ошибка: неправильный выбор. Пожалуйста, выберите корректный пункт.\n";
+                    cout << "Неправильный выбор. Попробуйте снова.\n";
             }
         }
+    }
+
+    void additemmanually() {
+        string name;
+        double price;
+        int cookingtime;
+
+        cout << "\n=== ДОБАВИТЬ НОВОЕ БЛЮДО ===\n";
+        cout << "Введите название блюда: ";
+        cin.ignore();
+        getline(cin, name);
+
+        cout << "Введите цену: ";
+        cin >> price;
+
+        cout << "Введите время приготовления (мин): ";
+        cin >> cookingtime;
+
+        menuitem newitem;
+        newitem.setname(name);
+        newitem.setprice(price);
+        newitem.setcookingtime(cookingtime);
+
+        items.push_back(newitem);
+        cout << "Блюдо успешно добавлено!\n";
     }
 };
 
