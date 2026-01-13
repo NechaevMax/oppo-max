@@ -1,0 +1,4 @@
+menu name="Борщ" price=5.5 time=30
+menu name="Салат Цезарь" price=7.0 time=10
+menu name="Стейк" price=12.5 time=25
+menu name="Пельмени" price=4.0 time=15
