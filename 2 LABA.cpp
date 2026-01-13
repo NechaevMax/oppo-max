@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <locale>
 #include <windows.h>
+
 
 using namespace std;
 
@@ -34,17 +36,15 @@ public:
     }
 
     void print() const {
-        cout << "название: " << name
-            << ", цена: " << price
-            << ", время: " << cookingtime << " мин" << endl;
+        cout << "Название: " << name
+            << ", Цена: " << price
+            << ", Время: " << cookingtime << " мин" << endl;
     }
 };
-
 
 class menumanager {
 private:
     vector<menuitem> items;
-
 
     string removequotes(const string& s) {
         if (s.size() >= 2 && s.front() == '"' && s.back() == '"')
@@ -56,7 +56,7 @@ public:
     void readfromfile(const string& filename) {
         ifstream file(filename);
         if (!file) {
-            cout << "ошибка открытия файла\n";
+            cout << "Ошибка открытия файла\n";
             return;
         }
 
@@ -65,16 +65,13 @@ public:
             if (line.empty()) continue;
 
             stringstream ss(line);
-            string token;
-            string type;
-
+            string token, type;
             ss >> type;
 
             if (type != "menu") continue;
 
             menuitem item;
 
-            // читаем остальные поля любом порядке
             while (ss >> token) {
                 size_t pos = token.find('=');
                 if (pos == string::npos) continue;
@@ -82,12 +79,11 @@ public:
                 string key = token.substr(0, pos);
                 string value = token.substr(pos + 1);
 
-                // если значение в кавычках и с пробелами
-                if (value.front() == '"' && value.back() != '"') {
+                if (!value.empty() && value.front() == '"' && value.back() != '"') {
                     string rest;
                     while (ss >> rest) {
                         value += " " + rest;
-                        if (rest.back() == '"') break;
+                        if (!rest.empty() && rest.back() == '"') break;
                     }
                 }
 
@@ -96,9 +92,9 @@ public:
                 if (key == "name")
                     item.setname(value);
                 else if (key == "price")
-                    item.setprice(stod(value));
+                    item.setprice(atof(value.c_str()));
                 else if (key == "time")
-                    item.setcookingtime(stoi(value));
+                    item.setcookingtime(atoi(value.c_str()));
             }
 
             items.push_back(item);
@@ -115,67 +111,14 @@ public:
     }
 
     void filterbytime(int maxtime) const {
-        for (const auto& item : items) {
+        for (const auto& item : items)
             if (item.getcookingtime() <= maxtime)
                 item.print();
-        }
     }
 
     void printall() const {
         for (const auto& item : items)
             item.print();
-    }
-
-    void displaymenu() {
-        int choice;
-        while (true) {
-            cout << "\n========== МЕНЮ ==========\n";
-            cout << "1. Вывести все блюда\n";
-            cout << "2. Вывести отсортировано по времени\n";
-            cout << "3. Фильтр по времени приготовления\n";
-            cout << "4. Добавить новое блюдо\n";
-            cout << "5. Выход\n";
-            cout << "Выберите опцию: ";
-            cout.flush();
-            
-            cin >> choice;
-            cin.ignore(10000, '\n');
-            
-            if (cin.fail()) {
-                cin.clear();
-                cout << "Ошибка ввода. Попробуйте снова.\n";
-                continue;
-            }
-
-            switch (choice) {
-                case 1:
-                    cout << "\n=== ВСЕ БЛЮДА ===\n";
-                    printall();
-                    break;
-                case 2:
-                    cout << "\n=== ОТСОРТИРОВАНО ПО ВРЕМЕНИ ===\n";
-                    sortbycookingtime();
-                    printall();
-                    break;
-                case 3: {
-                    int t;
-                    cout << "Введите максимальное время (мин): ";
-                    cin >> t;
-                    cin.ignore(10000, '\n');
-                    cout << "\n=== ФИЛЬТР ПО ВРЕМЕНИ (" << t << " мин) ===\n";
-                    filterbytime(t);
-                    break;
-                }
-                case 4:
-                    additemmanually();
-                    break;
-                case 5:
-                    cout << "До свидания!\n";
-                    return;
-                default:
-                    cout << "Неправильный выбор. Попробуйте снова.\n";
-            }
-        }
     }
 
     void additemmanually() {
@@ -184,45 +127,76 @@ public:
         int cookingtime;
 
         cout << "\n=== ДОБАВИТЬ НОВОЕ БЛЮДО ===\n";
-        cout << "Введите название блюда: ";
-        cout.flush();
+        cout << "Введите название: ";
         cin.ignore();
         getline(cin, name);
 
         cout << "Введите цену: ";
-        cout.flush();
         cin >> price;
 
         cout << "Введите время приготовления (мин): ";
-        cout.flush();
         cin >> cookingtime;
-        cin.ignore(10000, '\n');
 
-        menuitem newitem;
-        newitem.setname(name);
-        newitem.setprice(price);
-        newitem.setcookingtime(cookingtime);
+        menuitem item;
+        item.setname(name);
+        item.setprice(price);
+        item.setcookingtime(cookingtime);
 
-        items.push_back(newitem);
-        cout << "Блюдо успешно добавлено!\n";
+        items.push_back(item);
+        cout << "Блюдо добавлено!\n";
+    }
+
+    void displaymenu() {
+        int choice;
+        while (true) {
+            cout << "\n===== МЕНЮ =====\n";
+            cout << "1. Показать все блюда\n";
+            cout << "2. Сортировать по времени\n";
+            cout << "3. Фильтр по времени\n";
+            cout << "4. Добавить блюдо\n";
+            cout << "5. Выход\n";
+            cout << "Выбор: ";
+
+            cin >> choice;
+
+            switch (choice) {
+            case 1:
+                printall();
+                break;
+            case 2:
+                sortbycookingtime();
+                printall();
+                break;
+            case 3: {
+                int t;
+                cout << "Максимальное время: ";
+                cin >> t;
+                filterbytime(t);
+                break;
+            }
+            case 4:
+                additemmanually();
+                break;
+            case 5:
+                cout << "До свидания!\n";
+                return;
+            default:
+                cout << "Неверный пункт меню\n";
+            }
+        }
     }
 };
 
-
 int main() {
-    // Установка UTF-8 кодировки для консоли Windows
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
-    
-    // Для русского языка
-    setlocale(LC_ALL, ".UTF8");
-    
+    setlocale(LC_ALL, "Russian");
+
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
     menumanager manager;
-
-    cout << "Загружаю меню из файла menu.txt...\n";
     manager.readfromfile("menu.txt");
-
     manager.displaymenu();
 
     return 0;
-} 
+}
+

@@ -8,7 +8,7 @@ if exist "2 LABA.exe" (
     echo.
     echo Запускаю программу...
     echo.
-    echo 5 | "2 LABA.exe"
+    "2 LABA.exe"
 ) else (
     echo Ошибка компиляции
 )
