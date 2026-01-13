@@ -136,7 +136,16 @@ public:
             cout << "4. Добавить новое блюдо\n";
             cout << "5. Выход\n";
             cout << "Выберите опцию: ";
+            cout.flush();
+            
             cin >> choice;
+            cin.ignore(10000, '\n');
+            
+            if (cin.fail()) {
+                cin.clear();
+                cout << "Ошибка ввода. Попробуйте снова.\n";
+                continue;
+            }
 
             switch (choice) {
                 case 1:
@@ -152,6 +161,7 @@ public:
                     int t;
                     cout << "Введите максимальное время (мин): ";
                     cin >> t;
+                    cin.ignore(10000, '\n');
                     cout << "\n=== ФИЛЬТР ПО ВРЕМЕНИ (" << t << " мин) ===\n";
                     filterbytime(t);
                     break;
@@ -175,14 +185,18 @@ public:
 
         cout << "\n=== ДОБАВИТЬ НОВОЕ БЛЮДО ===\n";
         cout << "Введите название блюда: ";
+        cout.flush();
         cin.ignore();
         getline(cin, name);
 
         cout << "Введите цену: ";
+        cout.flush();
         cin >> price;
 
         cout << "Введите время приготовления (мин): ";
+        cout.flush();
         cin >> cookingtime;
+        cin.ignore(10000, '\n');
 
         menuitem newitem;
         newitem.setname(name);
@@ -205,6 +219,7 @@ int main() {
     
     menumanager manager;
 
+    cout << "Загружаю меню из файла menu.txt...\n";
     manager.readfromfile("menu.txt");
 
     manager.displaymenu();
