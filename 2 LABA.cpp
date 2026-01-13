@@ -125,6 +125,44 @@ public:
         for (const auto& item : items)
             item.print();
     }
+
+    void displaymenu() {
+        int choice;
+        while (true) {
+            cout << "\n========== МЕНЮ ==========\n";
+            cout << "1. Вывести все блюда\n";
+            cout << "2. Вывести отсортировано по времени\n";
+            cout << "3. Фильтр по времени приготовления\n";
+            cout << "4. Выход\n";
+            cout << "Выберите опцию: ";
+            cin >> choice;
+
+            switch (choice) {
+                case 1:
+                    cout << "\n=== ВСЕ БЛЮДА ===\n";
+                    printall();
+                    break;
+                case 2:
+                    cout << "\n=== ОТСОРТИРОВАНО ПО ВРЕМЕНИ ===\n";
+                    sortbycookingtime();
+                    printall();
+                    break;
+                case 3: {
+                    int t;
+                    cout << "Введите максимальное время (мин): ";
+                    cin >> t;
+                    cout << "\n=== ФИЛЬТР ПО ВРЕМЕНИ (" << t << " мин) ===\n";
+                    filterbytime(t);
+                    break;
+                }
+                case 4:
+                    cout << "До свидания!\n";
+                    return;
+                default:
+                    cout << "Неправильный выбор. Попробуйте снова.\n";
+            }
+        }
+    }
 };
 
 
@@ -140,14 +178,7 @@ int main() {
 
     manager.readfromfile("menu.txt");
 
-    cout << "=== отсортировано по времени ===\n";
-    manager.sortbycookingtime();
-    manager.printall();
+    manager.displaymenu();
 
-    
-    int t;
-    cin >> t;
-    cout << "\n=== фильтр по времени (" << t << ")===\n";
-    manager.filterbytime(t);
     return 0;
 } 
