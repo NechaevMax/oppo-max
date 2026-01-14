@@ -1,0 +1,3 @@
+Running tests...
+[WARN] строка 2: Ошибка парсинга: некорректное число price: abc
+[OK] All tests passed

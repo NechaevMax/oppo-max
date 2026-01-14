@@ -1,0 +1,40 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package menu {
+  class MenuItem {
+    - name_: string
+    - price_: double
+    - cooking_time_min_: int
+    + name(): string
+    + price(): double
+    + cookingTimeMin(): int
+  }
+
+  class MenuLineParser {
+    + parseLine(line: string): MenuItem
+  }
+
+  interface MenuRepository {
+    + loadFromFile(filename: string): vector<MenuItem>
+  }
+
+  class FileMenuRepository {
+    + loadFromFile(filename: string): vector<MenuItem>
+  }
+
+  class MenuManager {
+    - items_: vector<MenuItem>
+    + setItems(items: vector<MenuItem>)
+    + items(): vector<MenuItem>
+    + addItem(item: MenuItem)
+    + sortByCookingTime()
+    + filterByMaxCookingTime(maxMinutes: int): vector<MenuItem>
+  }
+
+  MenuRepository <|.. FileMenuRepository
+  FileMenuRepository ..> MenuLineParser : uses
+  MenuManager o-- MenuItem
+}
+
+@enduml

@@ -1,0 +1,7 @@
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/menu_lib.dir
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/menu_app.dir
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/menu_tests.dir
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/menu_benchmark.dir
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/test.dir
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/edit_cache.dir
+/mnt/data/pr2_1_5/improved_version/build/CMakeFiles/rebuild_cache.dir

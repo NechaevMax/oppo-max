@@ -1,0 +1,2 @@
+/usr/bin/ar qc libmenu_lib.a CMakeFiles/menu_lib.dir/src/MenuLineParser.cpp.o CMakeFiles/menu_lib.dir/src/MenuRepository.cpp.o CMakeFiles/menu_lib.dir/src/MenuManager.cpp.o
+/usr/bin/ranlib libmenu_lib.a

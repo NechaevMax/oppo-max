@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/menu_benchmark.dir/src/benchmark.cpp.o -o menu_benchmark  libmenu_lib.a 
